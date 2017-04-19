@@ -32,7 +32,7 @@
     <div class="wrapper">
 
         <div class="login-logo">
-            <a href="#"><b>TMC</b>2.0</a>
+            <a href="{{ url('home') }}"><b>TMC</b>2.0</a>
         </div>
 
 
@@ -91,6 +91,13 @@
                     </tr>
                     </tfoot>
                 </table>
+                <form role="form" method="POST" action="{{ URL::route('logout') }}">
+                    {{ csrf_field() }}
+                    <button type="submit" class="btn btn-primary">
+                        Salir
+                    </button>
+                </form>
+
             </div>
         </div>
 
