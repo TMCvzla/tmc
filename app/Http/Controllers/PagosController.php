@@ -29,11 +29,11 @@ class PagosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function procesar()
+    public function process()
     {
         //return view('transactions',array('data' => \DB::table('pagos')->pluck('monto','concepto')));
         $listado = \DB::select('select * from pagos where estatus = 0 order by created_at desc');
-        return view('procesar', ['data' => $listado]);
+        return view('process', ['data' => $listado]);
     }
 
     /**

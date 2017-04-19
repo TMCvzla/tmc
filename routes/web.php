@@ -87,7 +87,7 @@ Route::post('/pagos.store', 'PagosController@store');
 
 Route::get('/transactions/{estatus}', 'PagosController@index');
 
-Route::get('/procesar', 'PagosController@procesar');
+Route::get('/process', 'PagosController@process');
 
 
 
