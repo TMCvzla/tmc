@@ -3226,11 +3226,16 @@ table.text-center th {
 }
 .login-page,
 .register-page {
-  background: #d2d6de;
+  background-image: url("images/fondo.jpg");
+  /*background: #d2d6de;*/
 }
 .login-box,
 .register-box {
   width: 360px;
+  margin: 7% auto;
+}
+.content-box {
+  width: 90%;
   margin: 7% auto;
 }
 @media (max-width: 768px) {
