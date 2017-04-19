@@ -32,7 +32,7 @@
 <div class="wrapper">
 
   <div class="login-logo">
-    <a href="{{ url('home') }}"><b>TMC</b>2.0</a>
+    <a href="#"><b>TMC</b>2.0</a>
   </div>
 
 

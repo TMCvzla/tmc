@@ -8,7 +8,7 @@
 <div class="col-md-8 col-md-offset-2">
   <!-- /.login-logo -->
   <div class="register-logo">
-    <a href="{{ url('home') }}"><b>TMC</b>2.0</a>
+    <a href="#"><b>TMC</b>2.0</a>
   </div>
 
   <div class="login-box-body">
