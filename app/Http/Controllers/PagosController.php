@@ -5,35 +5,63 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Redirect;
 
 use App\Pagos;
 
 class PagosController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of transaction by Estatus
      *
      * @return \Illuminate\Http\Response
      */
     public function index($estatus)
     {
-        //
-        // Listado de transacciones
-       // return view('transactions',array('data' => \DB::table('pagos')->where('userid', \Auth::user()->id)->pluck('monto','concepto')));
-        $listado = \DB::select('select * from pagos where userid ='.(\Auth::user()->id).' and estatus = '.$estatus);
+        $sql =
+            ' SELECT * ' .
+            ' FROM pagos ' .
+            ' WHERE userid = ' . (\Auth::user()->id) .
+            ' AND estatus = ' . $estatus .
+            ' ORDER BY created_at DESC';
+        $listado = \DB::select($sql);
+
         return view('transactions', ['data' => $listado]);
     }
 
     /**
-     * Pagos para ser procesados
+     * Display a listing of transaction to Process
      *
      * @return \Illuminate\Http\Response
      */
-    public function process()
+    public function toProcess()
     {
-        //return view('transactions',array('data' => \DB::table('pagos')->pluck('monto','concepto')));
-        $listado = \DB::select('select * from pagos where estatus = 0 order by created_at desc');
+        $sql =
+            ' SELECT * ' .
+            ' FROM pagos ' .
+            ' WHERE estatus = ' . Pagos::$EST_PORPROCESAR .
+            ' ORDER BY created_at DESC';
+        $listado = \DB::select($sql);
+
         return view('process', ['data' => $listado]);
+    }
+
+    /**
+     * Process a payment
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function process(Request $request)
+    {
+        $object = Pagos::find($request->id);
+
+        $object->estatus = Pagos::$EST_PROCESADOS;
+        $object->cod_procesado = $request->codigo;
+        $object->fecha_procesado = date('Y-m-d H:i:s');
+        $object->save();
+
+        return redirect('toProcess');
+
     }
 
     /**
@@ -62,7 +90,7 @@ class PagosController extends Controller
         $Pagos->cith = $request->cipre.$request->cith;
         $Pagos->userid= $request->userid;
         $Pagos->fecha= date('Y-m-d H:i:s');
-        $Pagos->estatus = $request->estatus;
+        $Pagos->estatus = Pagos::$EST_PORPROCESAR;
         $Pagos->save();
         return redirect('home');
     }

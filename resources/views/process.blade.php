@@ -37,24 +37,23 @@
 
 
         <div class="box">
-            <p class="login-box-msg">Procesar Transacciones</p>
-
-            <div class="row">
-                <div class="col-lg-4 col-xs-6">
-                    <!--<button type="button" class="btn btn-danger btn-block btn-flat" >Regresar</button>-->
-                </div>
-                <div class="col-lg-4 col-xs-6">
-                    <button type="submit" class="btn btn-warning btn-block btn-flat" onclick="history.back()">Volver
-                    </button>
-                </div>
-                <div class="col-lg-4 col-xs-6">
-                    <!--<button type="submit" class="btn btn-success btn-block btn-flat">Procesados</button>-->
-                </div>
-            </div>
-
-
             <div class="box-header">
-                <h3 class="box-title">Seleccione los Pagos a Procesar</h3>
+                <p>
+                <h1>Procesar Transacciones</h1></p>
+
+                <div class="row">
+                    <div class="col-lg-5 col-xs-6">
+                        <!--<button type="button" class="btn btn-danger btn-block btn-flat" >Regresar</button>-->
+                    </div>
+                    <div class="col-lg-2 col-xs-6">
+                        <button type="submit" class="btn btn-warning btn-block btn-flat" onclick="history.back()">Volver
+                        </button>
+                    </div>
+                    <div class="col-lg-5 col-xs-6">
+                        <!--<button type="button" class="btn btn-danger btn-block btn-flat" >Regresar</button>-->
+                    </div>
+                </div>
+                {{--<h3 class="box-title">Seleccione los Pagos a Procesar</h3>--}}
             </div>
 
             <!-- /.box-header -->
@@ -73,7 +72,21 @@
                     <tbody>
                     @foreach ($data as $datas)
                         <tr>
-                            <td>{{ $datas->pagos_id }}</td>
+                            <td>
+                                <div class="input-group ">
+                                    <form name="{{ 'form_'.$datas->pagos_id }}" id="{{ 'form_'.$datas->pagos_id }}"
+                                          method="post" action="{{ url('pagos.process') }}">
+                                        {{ csrf_field() }}
+                                        <input type="text" class="form-control"
+                                               id="{{ 'cod_'.$datas->pagos_id }}" name="codigo">
+                                        <input type="hidden" name="id" id="{{ 'pay_'.$datas->pagos_id }}"
+                                               value="{{ $datas->pagos_id }}"/>
+                                        <span class="input-group-btn">
+                                          <button type="submit" class="btn btn-info btn-flat">Procesar</button>
+                                        </span>
+                                    </form>
+                                </div>
+                            </td>
                             <td>{{ $datas->concepto }}</td>
                             <td>{{ $datas->nombretc }}</td>
                             <td>{{ $datas->fecha }}</td>
@@ -81,15 +94,15 @@
                         </tr>
                     @endforeach
                     </tbody>
-                    <tfoot>
-                    <tr>
-                        <th>N&uacute;mero</th>
-                        <th>Concepto</th>
-                        <th>Cliente</th>
-                        <th>Fecha</th>
-                        <th>Monto(Bs)</th>
-                    </tr>
-                    </tfoot>
+                    {{--<tfoot>--}}
+                    {{--<tr>--}}
+                    {{--<th>N&uacute;mero</th>--}}
+                    {{--<th>Concepto</th>--}}
+                    {{--<th>Cliente</th>--}}
+                    {{--<th>Fecha</th>--}}
+                    {{--<th>Monto(Bs)</th>--}}
+                    {{--</tr>--}}
+                    {{--</tfoot>--}}
                 </table>
                 <form role="form" method="POST" action="{{ URL::route('logout') }}">
                     {{ csrf_field() }}
@@ -126,12 +139,11 @@
 <!-- page script -->
 <script>
   $(function () {
-    //$("#example1").DataTable();
     $('#example1').DataTable({
       "paging": false,
       "lengthChange": false,
       "searching": false,
-      "ordering": true,
+        "ordering": false,
       "info": false,
       "autoWidth": false
     });

@@ -1,4 +1,4 @@
 <?php
-header("refresh: 0; public/");
+header("refresh: 0; public/home");
 
 ?>
