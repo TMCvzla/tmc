@@ -47,18 +47,40 @@ class PagosController extends Controller
     }
 
     /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($this->somethingElseIsInvalid()) {
+                $validator->errors()->add('field', 'Something is wrong with this field!');
+            }
+        });
+    }
+    
+    /**
      * Process a payment
      *
      * @return \Illuminate\Http\Response
      */
     public function process(Request $request)
     {
+        $validator = $this->validate($request,[
+            'codigo'=>'required|max:255',
+            'id'=>'required',
+        ]);
+
         $object = Pagos::find($request->id);
 
         $object->estatus = Pagos::$EST_PROCESADOS;
         $object->cod_procesado = $request->codigo;
         $object->fecha_procesado = date('Y-m-d H:i:s');
-        $object->save();
+        //$object->save();
+
+        \Session::flash('alert-success','Pago procesado satisfactoriamente.');
 
         return redirect('toProcess');
 

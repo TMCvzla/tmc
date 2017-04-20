@@ -42,18 +42,44 @@
                 <h1>Procesar Transacciones</h1></p>
 
                 <div class="row">
-                    <div class="col-lg-5 col-xs-6">
+                    <div class="col-lg-5 col-xs-3">
                         <!--<button type="button" class="btn btn-danger btn-block btn-flat" >Regresar</button>-->
                     </div>
                     <div class="col-lg-2 col-xs-6">
                         <button type="submit" class="btn btn-warning btn-block btn-flat" onclick="history.back()">Volver
                         </button>
                     </div>
-                    <div class="col-lg-5 col-xs-6">
+                    <div class="col-lg-5 col-xs-3">
                         <!--<button type="button" class="btn btn-danger btn-block btn-flat" >Regresar</button>-->
                     </div>
                 </div>
-                {{--<h3 class="box-title">Seleccione los Pagos a Procesar</h3>--}}
+                <br />
+                <div class="row">
+                    <div class="col-lg-6 col-xs-6">
+                        @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+                            @if(Session::has('alert-' . $msg))
+                                <div class="alert alert-{{ $msg }}">
+                                    <span class="glyphicon glyphicon-ok"></span> {{ Session::get('alert-' . $msg) }}
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                </div>
+                            @endif
+                        @endforeach
+                            @if (count($errors) > 0)
+                                <div class="alert alert-danger">
+                                    @foreach ($errors->all() as $error)
+                                        <span class="glyphicon glyphicon-ok"></span>
+                                            {{ $error }}
+                                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    @endforeach
+
+
+                                </div>
+                            @endif
+                        {{--@if(Session::has('flash_message'))--}}
+                            {{--<div class="alert alert-success"><span class="glyphicon glyphicon-ok"></span><em> {!! session('flash_message') !!}</em></div>--}}
+                        {{--@endif--}}
+                    </div>
+                </div>
             </div>
 
             <!-- /.box-header -->
@@ -79,7 +105,7 @@
                                         {{ csrf_field() }}
                                         <input type="text" class="form-control"
                                                id="{{ 'cod_'.$datas->pagos_id }}" name="codigo">
-                                        <input type="hidden" name="id" id="{{ 'pay_'.$datas->pagos_id }}"
+                                        <input type="hidden" name="ids" id="{{ 'pay_'.$datas->pagos_id }}"
                                                value="{{ $datas->pagos_id }}"/>
                                         <span class="input-group-btn">
                                           <button type="submit" class="btn btn-info btn-flat">Procesar</button>
@@ -133,9 +159,9 @@
 <!-- FastClick -->
 <script src="{{ url('/') }}/plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
-<script src="{{ url('/') }}/diapp.min.js"></script>
+{{--<script src="{{ url('/') }}/diapp.min.js"></script>--}}
 <!-- AdminLTE for demo purposes -->
-<script src="{{ url('/') }}/didemo.js"></script>
+{{--<script src="{{ url('/') }}/didemo.js"></script>--}}
 <!-- page script -->
 <script>
   $(function () {
