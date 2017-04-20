@@ -60,7 +60,7 @@ class PagosController extends Controller
             }
         });
     }
-    
+
     /**
      * Process a payment
      *
@@ -72,6 +72,7 @@ class PagosController extends Controller
             'codigo'=>'required|max:255',
             'id'=>'required',
         ]);
+        $this->withValidator($validator);
 
         $object = Pagos::find($request->id);
 

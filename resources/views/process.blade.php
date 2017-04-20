@@ -66,12 +66,11 @@
                         @endforeach
                             @if (count($errors) > 0)
                                 <div class="alert alert-danger">
-                                    @foreach ($errors->all() as $error)
-                                        <span class="glyphicon glyphicon-ok"></span>
-                                            {{ $error }}
-                                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    @endforeach
-
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
 
                                 </div>
                             @endif
@@ -105,7 +104,7 @@
                                         {{ csrf_field() }}
                                         <input type="text" class="form-control"
                                                id="{{ 'cod_'.$datas->pagos_id }}" name="codigo">
-                                        <input type="hidden" name="ids" id="{{ 'pay_'.$datas->pagos_id }}"
+                                        <input type="hidden" name="id" id="{{ 'pay_'.$datas->pagos_id }}"
                                                value="{{ $datas->pagos_id }}"/>
                                         <span class="input-group-btn">
                                           <button type="submit" class="btn btn-info btn-flat">Procesar</button>
