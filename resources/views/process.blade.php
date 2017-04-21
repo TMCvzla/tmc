@@ -74,9 +74,6 @@
 
                                 </div>
                             @endif
-                        {{--@if(Session::has('flash_message'))--}}
-                            {{--<div class="alert alert-success"><span class="glyphicon glyphicon-ok"></span><em> {!! session('flash_message') !!}</em></div>--}}
-                        {{--@endif--}}
                     </div>
                 </div>
             </div>
@@ -103,7 +100,7 @@
                                           method="post" action="{{ url('pagos.process') }}">
                                         {{ csrf_field() }}
                                         <input type="text" class="form-control"
-                                               id="{{ 'cod_'.$datas->pagos_id }}" name="codigo">
+                                               id="{{ 'cod_'.$datas->pagos_id }}" name="codigo" required="required">
                                         <input type="hidden" name="id" id="{{ 'pay_'.$datas->pagos_id }}"
                                                value="{{ $datas->pagos_id }}"/>
                                         <span class="input-group-btn">
