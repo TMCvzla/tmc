@@ -44,7 +44,6 @@
                 <input id="cith" name="cith" type="text" class="form-control"
                        placeholder="Cedula del Tarjetahabiente">
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
-                <input name="userid" id="userid" type="hidden" value="{{Auth::user()->id}}">
             </div>
             <br/>
             <div class="row">

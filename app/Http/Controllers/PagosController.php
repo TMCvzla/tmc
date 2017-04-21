@@ -40,26 +40,12 @@ class PagosController extends Controller
             ' SELECT * ' .
             ' FROM pagos ' .
             ' WHERE estatus = ' . Pagos::$EST_PORPROCESAR .
-            ' ORDER BY created_at DESC';
+            ' ORDER BY created_at ASC';
         $listado = \DB::select($sql);
 
         return view('process', ['data' => $listado]);
     }
 
-    /**
-     * Configure the validator instance.
-     *
-     * @param  \Illuminate\Validation\Validator  $validator
-     * @return void
-     */
-    public function withValidator($validator)
-    {
-        $validator->after(function ($validator) {
-            if ($this->somethingElseIsInvalid()) {
-                $validator->errors()->add('field', 'Something is wrong with this field!');
-            }
-        });
-    }
 
     /**
      * Process a payment
@@ -68,20 +54,19 @@ class PagosController extends Controller
      */
     public function process(Request $request)
     {
-        $validator = $this->validate($request,[
-            'codigo'=>'required|max:255',
+        $this->validate($request,[
+            'cod_procesado'=>'required|unique:pagos|max:100',
             'id'=>'required',
         ]);
-//        $this->withValidator($validator);
 
         $object = Pagos::find($request->id);
 
         $object->estatus = Pagos::$EST_PROCESADOS;
-        $object->cod_procesado = $request->codigo;
+        $object->cod_procesado = $request->cod_procesado;
         $object->fecha_procesado = date('Y-m-d H:i:s');
-        //$object->save();
+        $object->save();
 
-        \Session::flash('alert-success','Pago procesado satisfactoriamente.');
+        \Session::flash('alert-success','Pago '.$request->cod_procesado.' procesado satisfactoriamente.');
 
         return redirect('toProcess');
 
@@ -105,15 +90,16 @@ class PagosController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $Pagos = new Pagos;
         $Pagos->monto = $request->monto;
         $Pagos->concepto= $request->concepto;
         $Pagos->nombretc= $request->nombretc;
         $Pagos->cith = $request->cipre.$request->cith;
-        $Pagos->userid= $request->userid;
+
+        $Pagos->userid= \Auth::user()->id;
         $Pagos->fecha= date('Y-m-d H:i:s');
         $Pagos->estatus = Pagos::$EST_PORPROCESAR;
+
         $Pagos->save();
         return redirect('home');
     }

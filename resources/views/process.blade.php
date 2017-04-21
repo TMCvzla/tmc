@@ -46,8 +46,7 @@
                         <!--<button type="button" class="btn btn-danger btn-block btn-flat" >Regresar</button>-->
                     </div>
                     <div class="col-lg-2 col-xs-6">
-                        <button type="submit" class="btn btn-warning btn-block btn-flat" onclick="history.back()">Volver
-                        </button>
+                        <a href="{{ url('home') }}"><button type="button" class="btn btn-warning btn-block btn-flat">Volver</button></a>
                     </div>
                     <div class="col-lg-5 col-xs-3">
                         <!--<button type="button" class="btn btn-danger btn-block btn-flat" >Regresar</button>-->
@@ -58,22 +57,22 @@
                     <div class="col-lg-6 col-xs-6">
                         @foreach (['danger', 'warning', 'success', 'info'] as $msg)
                             @if(Session::has('alert-' . $msg))
-                                <div class="alert alert-{{ $msg }}">
+                                <div class="alert alert-{{ $msg }}" data-dismiss="alert" >
                                     <span class="glyphicon glyphicon-ok"></span> {{ Session::get('alert-' . $msg) }}
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 </div>
                             @endif
                         @endforeach
-                            @if (count($errors) > 0)
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
 
-                                </div>
-                            @endif
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -100,7 +99,7 @@
                                           method="post" action="{{ url('pagos.process') }}">
                                         {{ csrf_field() }}
                                         <input type="text" class="form-control"
-                                               id="{{ 'cod_'.$datas->pagos_id }}" name="codigo" required="required">
+                                               id="{{ 'cod_'.$datas->pagos_id }}" name="cod_procesado" required="required">
                                         <input type="hidden" name="id" id="{{ 'pay_'.$datas->pagos_id }}"
                                                value="{{ $datas->pagos_id }}"/>
                                         <span class="input-group-btn">
