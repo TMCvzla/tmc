@@ -14,6 +14,29 @@
         <h1>Bienvenido
             <small>¡Utiliza nuestro servicio de inmediato!</small>
         </h1>
+        <br/>
+        <div class="row">
+            <div class="col-lg-6 col-xs-6">
+                @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+                    @if(Session::has('alert-' . $msg))
+                        <div class="alert alert-{{ $msg }}" data-dismiss="alert">
+                            <span class="glyphicon glyphicon-ok"></span> {{ Session::get('alert-' . $msg) }}
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        </div>
+                    @endif
+                @endforeach
+                @if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+
+                    </div>
+                @endif
+            </div>
+        </div>
         <form action="{{ url('pagos.store') }}" method="post">
             {{ csrf_field() }}
             <div class="form-group has-feedback">

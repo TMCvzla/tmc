@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\PagoHistorico;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -66,6 +67,10 @@ class PagosController extends Controller
         $object->fecha_procesado = date('Y-m-d H:i:s');
         $object->save();
 
+        $pgh = new PagoHistorico();
+        $pgh->createPagoHistorico($object->pagos_id, 'estatus', $object->estatus, null);
+        $pgh->save();
+
         \Session::flash('alert-success','Pago '.$request->cod_procesado.' procesado satisfactoriamente.');
 
         return redirect('toProcess');
@@ -90,18 +95,63 @@ class PagosController extends Controller
      */
     public function store(Request $request)
     {
-        $Pagos = new Pagos;
-        $Pagos->monto = $request->monto;
-        $Pagos->concepto= $request->concepto;
-        $Pagos->nombretc= $request->nombretc;
-        $Pagos->cith = $request->cipre.$request->cith;
+        //Save the payment to audit
+        $payment = new Pagos;
+        $payment->monto = $request->monto;
+        $payment->concepto = $request->concepto;
+        $payment->nombretc = $request->nombretc;
+        $payment->cith = $request->cipre . $request->cith;
 
-        $Pagos->userid= \Auth::user()->id;
-        $Pagos->fecha= date('Y-m-d H:i:s');
-        $Pagos->estatus = Pagos::$EST_PORPROCESAR;
+        $payment->userid = \Auth::user()->id;
+        $payment->fecha = date('Y-m-d H:i:s');
+        $payment->estatus = Pagos::$EST_PENDIENTE;
 
-        $Pagos->save();
+        $payment->save();
+
+        $pgh = new PagoHistorico();
+        $pgh->createPagoHistorico($payment->pagos_id, 'estatus', $payment->estatus, null);
+        $pgh->save();
+
+        //Execute the Payment
+        if ($this->executePayment($payment)) {
+            $payment->estatus = Pagos::$EST_PORPROCESAR;
+            \Session::flash('alert-success', 'Pago ejecutado satisfactoriamente.');
+        } else {
+            $payment->estatus = Pagos::$EST_FALLIDO;
+            \Session::flash('alert-danger', 'Ocurrio un error al ejecutar el pago.');
+        }
+        $payment->save();
+
+        $pgh = new PagoHistorico();
+        $pgh->createPagoHistorico($payment->pagos_id, 'estatus', $payment->estatus, null);
+        $pgh->save();
+
         return redirect('home');
+    }
+
+    /**
+     * Execute de Payment
+     * @return bool
+     */
+    private function executePayment(Pagos $payment)
+    {
+
+//        Here will be the connection with bridge!
+
+        return $this->getDummyBoleanResponse();
+    }
+
+    /**
+     * Erase after production
+     * @return bool
+     */
+    public function getDummyBoleanResponse()
+    {
+        sleep(rand(0, 3));
+        $response = rand(1, 100);
+        $percent = 10;
+
+        return ($response <= $percent ? true : false);
     }
 
     /**
