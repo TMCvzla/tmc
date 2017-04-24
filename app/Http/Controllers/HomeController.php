@@ -28,7 +28,7 @@ class HomeController extends Controller
         //return View::make('home', array('success' => '1'));
         return view('home',
             array(
-                'success' => \DB::table('clientes')->where('userid', \Auth::user()->id)->pluck('ci'),
+                'success' => \DB::table('clientes')->where('usu_id', \Auth::user()->id)->pluck('cli_ci'),
                 'EST_PORPROCESAR' => Pagos::$EST_PORPROCESAR,
                 'EST_PROCESADOS' => Pagos::$EST_PROCESADOS,
                 'EST_FACTURADOS' => Pagos::$EST_FACTURADOS

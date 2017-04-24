@@ -82,7 +82,8 @@
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th>N&uacute;mero</th>
+                        <th>Acci&oacute;n</th>
+                        <th>C&oacute;digo</th>
                         <th>Concepto</th>
                         <th>Cliente</th>
                         <th>Fecha</th>
@@ -108,6 +109,7 @@
                                     </form>
                                 </div>
                             </td>
+                            <td>{{ $datas->pagos_id }}</td>
                             <td>{{ $datas->concepto }}</td>
                             <td>{{ $datas->nombretc }}</td>
                             <td>{{ $datas->fecha }}</td>

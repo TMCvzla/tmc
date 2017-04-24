@@ -23,6 +23,8 @@ class CreatePagosTable extends Migration
             $table->string('userid');
             $table->dateTime('fecha');
             $table->integer('estatus');
+            $table->string('cod_procesado');
+            $table->timestamp('fecha_procesado');
             $table->rememberToken();
             $table->timestamps();
         });

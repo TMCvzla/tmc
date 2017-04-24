@@ -47,15 +47,15 @@ class ClientesController extends Controller
         //
         
         $clientes = new Clientes;
-        $clientes->nombre = $request->nombre;
-        $clientes->ci = $request->cipre.$request->ci;
-        $clientes->email = $request->email;
-        $clientes->userid = $request->userid;
-        $clientes->dirfiscal = $request->dirfiscal;
-        $clientes->direnvio = $request->direnvio;
-        $clientes->banco = $request->banco;
-        $clientes->cuenta = $request->cuenta;
-        $clientes->tipocuenta = $request->tipocuenta;
+        $clientes->cli_nombre = $request->nombre;
+        $clientes->cli_ci = $request->cipre.$request->ci;
+        $clientes->cli_email = $request->email;
+        $clientes->usu_id = $request->userid;
+        $clientes->cli_direccionfiscal = $request->dirfiscal;
+        $clientes->cli_direccionenvio = $request->direnvio;
+        $clientes->cli_banco = $request->banco;
+        $clientes->cli_nrocuenta = $request->cuenta;
+        $clientes->cli_tipocuenta = $request->tipocuenta;
         $clientes->save();
         return redirect('home');
     }

@@ -38,5 +38,7 @@ Route::get('/toProcess', 'PagosController@toProcess');
 
 Route::post('/pagos.process', 'PagosController@process');
 
+Route::resource('valoresvariables', 'ValorVariableController');
+
 
 

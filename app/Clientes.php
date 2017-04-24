@@ -2,35 +2,38 @@
 
 namespace App;
 
-//use Illuminate\Database\Eloquent\Model;
-//class Clientes extends Model
-/*{
-    //
-    protected $table = "clientes"
-}
-*/
-
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
 use Illuminate\Database\Eloquent\Model;
  
-//class Clientes extends Eloquent implements UserInterface, RemindableInterface {
 class Clientes extends Model {
 
- public static $rules = array(
-    'nombre'=>'required|min:2',
-    'ci'=>'required|min:2',
-    'enail'=>'required|min:2',
-    'userid'=>'required|min:1',
-    'dirfiscal'=>'required|min:2',
-    'direnvio'=>'required|min:2',
-    'banco'=>'required|min:1',
-    'cuenta'=>'required|min:2',
-    'tipocuenta'=>'required|min:1'
-    );
+    protected $primaryKey = 'cli_id';
 
+     public static $rules = array(
+        'cli_nombre'=>'required|min:2',
+        'cli_ci'=>'required|min:2',
+        'cli_email'=>'required|min:2',
+        'usu_id'=>'required|min:1',
+        'cli_direccionfiscal'=>'required|min:2',
+        'cli_direccionenvio'=>'required|min:2',
+        'cli_banco'=>'required|min:1',
+        'cli_nrocuenta'=>'required|min:2',
+        'cli_tipocuenta'=>'required|min:1'
+     );
 
     protected $table = 'clientes';
-    protected $fillable = array('clienteid','nombre','ci','email','userid','dirfiscal','direnvio', 'banco','cuenta','tipocuenta');
+    protected $fillable = array(
+        'cli_id',
+        'cli_nombre',
+        'cli_ci',
+        'cli_email',
+        'usu_id',
+        'cli_direccionfiscal',
+        'cli_direccionenvio',
+        'cli_banco',
+        'cli_nrocuenta',
+        'cli_tipocuenta'
+    );
      
 }
