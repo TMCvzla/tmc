@@ -2,13 +2,16 @@
 
 namespace App;
 
-use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
+use Illuminate\Auth\UserInterface;
 use Illuminate\Database\Eloquent\Model;
- 
-class Clientes extends Model {
+
+class Cliente extends Model
+{
 
     protected $primaryKey = 'cli_id';
+
+    protected $table = 'clientes';
 
      public static $rules = array(
         'cli_nombre'=>'required|min:2',
@@ -22,7 +25,6 @@ class Clientes extends Model {
         'cli_tipocuenta'=>'required|min:1'
      );
 
-    protected $table = 'clientes';
     protected $fillable = array(
         'cli_id',
         'cli_nombre',

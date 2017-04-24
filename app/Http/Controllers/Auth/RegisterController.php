@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use Validator;
+use App\Cliente;
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Validator;
 
 class RegisterController extends Controller
 {
@@ -48,14 +49,14 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'ci' => 'required|max:10',
+//            'name' => 'required|max:255',
+//            'ci' => 'required|max:10',
             'email' => 'required|email|max:255|unique:users',
-            'dirfiscal' => 'required|max:255',
-            'direnvio' => 'required|max:255',
-            'banco' => 'required|max:255',
-            'cuenta' => 'required|max:255',
-            'tipocuenta' => 'required|max:255',
+//            'dirfiscal' => 'required|max:255',
+//            'direnvio' => 'required|max:255',
+//            'banco' => 'required|max:255',
+//            'cuenta' => 'required|max:255',
+//            'tipocuenta' => 'required|max:255',
             'password' => 'required|min:6|confirmed',
         ]);
     }
@@ -68,16 +69,31 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'ci' => $data['cipre'].$data['ci'],
+        $user = User::create([
+//            'name' => $data['name'],
+            'usu_estatus' => User::$EST_ACTIVO,
+//            'ci' => $data['cipre'].$data['ci'],
             'email' => $data['email'],
-            'dirfiscal' => $data['dirfiscal'],
-            'direnvio' => $data['direnvio'],
-            'banco' => $data['banco'],
-            'cuenta' => $data['cuenta'],
-            'tipocuenta' => $data['tipocuenta'],
+//            'dirfiscal' => $data['dirfiscal'],
+//            'direnvio' => $data['direnvio'],
+//            'banco' => $data['banco'],
+//            'cuenta' => $data['cuenta'],
+//            'tipocuenta' => $data['tipocuenta'],
             'password' => bcrypt($data['password']),
         ]);
+
+        Cliente::create([
+            'cli_nombre' => $data['name'],
+            'cli_ci' => $data['cipre'] . $data['ci'],
+            'cli_email' => $data['email'],
+            'usu_id' => $user->id,
+            'cli_direccionfiscal' => $data['dirfiscal'],
+            'cli_direccionenvio' => $data['direnvio'],
+            'cli_banco' => $data['banco'],
+            'cli_nrocuenta' => $data['cuenta'],
+            'cli_tipocuenta' => $data['tipocuenta']
+        ]);
+
+        return $user;
     }
 }

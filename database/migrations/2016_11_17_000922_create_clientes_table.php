@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateClientesTable extends Migration
 {
@@ -15,17 +15,16 @@ class CreateClientesTable extends Migration
     {
         //
         Schema::create('clientes', function (Blueprint $table) {
-            $table->increments('clientes_id');
-            $table->string('nombre');
-            $table->string('ci')->unique();
-            $table->string('email')->unique();
-            $table->integer('userid');
-            $table->string('dirfiscal');
-            $table->string('direnvio');
-            $table->string('banco');
-            $table->string('tipocuenta');
-            $table->string('cuenta');
-            $table->rememberToken();
+            $table->increments('cli_id');
+            $table->string('cli_nombre', 100);
+            $table->string('cli_ci', 15)->unique();
+            $table->string('cli_email', 100)->unique();
+            $table->unsignedInteger('usu_id');
+            $table->string('cli_direccionfiscal', 500);
+            $table->string('cli_direccionenvio', 500);
+            $table->string('cli_banco', 100);
+            $table->string('cli_nrocuenta', 50);
+            $table->string('cli_tipocuenta', 20);
             $table->timestamps();
         });
     }

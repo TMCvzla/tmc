@@ -1,18 +1,12 @@
 <?php
-/*
-namespace App\Http\Controllers;
-use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Http\Clientes;
-*/
 
-//namespace TCM;
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
-use DB;
-use App\Http\Requests;
+
+use App\Cliente;
 use App\Http\Controllers;
-use App\Clientes;
+use App\Http\Requests;
+use DB;
+use Illuminate\Http\Request;
 
 class ClientesController extends Controller
 {
@@ -44,9 +38,7 @@ class ClientesController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        
-        $clientes = new Clientes;
+        $clientes = new Cliente;
         $clientes->cli_nombre = $request->nombre;
         $clientes->cli_ci = $request->cipre.$request->ci;
         $clientes->cli_email = $request->email;
