@@ -149,7 +149,7 @@ class PagosController extends Controller
     {
         sleep(rand(0, 3));
         $response = rand(1, 100);
-        $percent = 10;
+        $percent = 95;
 
         return ($response <= $percent ? true : false);
     }

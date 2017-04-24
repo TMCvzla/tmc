@@ -16,9 +16,10 @@ class CreateValoresVariablesTable extends Migration
         Schema::create('valores_variables', function (Blueprint $table) {
             $table->increments('vva_id');
             $table->string('vva_codigo',20);
-            $table->string('vva_valor',100);
+            $table->string('vva_valor',20);
+            $table->string('vva_nombre',100);
             $table->integer('vva_orden');
-            $table->string('vva_descripcion',200);
+            $table->string('vva_descripcion',250);
         });
     }
 

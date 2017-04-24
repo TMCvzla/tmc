@@ -15,27 +15,26 @@ class Pagos extends Model
     public static $EST_ENEVALUACION = 6;
     public static $EST_CERRADO = 7;
 
-    protected $primaryKey = 'pagos_id';
+    protected $primaryKey = 'pag_id';
 
     public static $rules = array(
-        'pagos_id' => 'required',
-        'monto' => 'required',
-        'concepto' => 'required|min:2',
-        'nombretc' => 'required',
-        'cith' => 'required',
-        'userid' => 'required',
-        'fecha' => 'required',
+        'pag_id' => 'required',
+        'pag_monto' => 'required',
+        'pag_concepto' => 'required|min:2',
+        'pag_nombretc' => 'required',
+        'pag_cith' => 'required',
+        'usu_id' => 'required',
         'estatus' => 'required'
     );
 
 
     protected $table = 'pagos';
-    protected $fillable = array('pagos_id', 'monto', 'concepto', 'nombretc', 'cith', 'userid', 'fecha', 'estatus', 'cod_procesado', 'fecha_procesado');
+    protected $fillable = array('pag_id', 'monto', 'concepto', 'nombretc', 'cith', 'userid', 'fecha', 'estatus', 'cod_procesado', 'fecha_procesado');
 
     public static function findById($id)
     {
 
-        $result = self::where('pagos_id', $id)->first();
+        $result = self::where('pag_id', $id)->first();
 
 //        if (!is_null($result))
 //        {

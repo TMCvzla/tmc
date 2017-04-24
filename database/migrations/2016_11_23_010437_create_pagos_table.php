@@ -13,20 +13,17 @@ class CreatePagosTable extends Migration
      */
     public function up()
     {
-        //
         Schema::create('pagos', function (Blueprint $table) {
-            $table->increments('pagos_id');
-            $table->string('monto');
-            $table->string('concepto');
-            $table->string('nombretc');
-            $table->string('cith');
-            $table->string('userid');
-            $table->dateTime('fecha');
-            $table->integer('estatus');
-            $table->string('cod_procesado');
-            $table->timestamp('fecha_procesado');
-            $table->rememberToken();
-            $table->timestamps();
+            $table->increments('pag_id');
+            $table->unsignedInteger('usu_id');
+            $table->string('pag_estatus',20);
+            $table->double('pag_monto');
+            $table->string('pag_concepto',100);
+            $table->string('pag_nombretc',100);
+            $table->string('pag_cith',20);
+            $table->string('pag_codigoprocesado',100)->nullable();
+            $table->timestamp('pag_fechacreacion');
+            $table->timestamp('pag_fechaactualizacion');
         });
     }
 

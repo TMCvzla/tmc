@@ -13,24 +13,28 @@ class Cliente extends Model
 
     protected $table = 'clientes';
 
+    const CREATED_AT = 'cli_fechacreacion';
+
+    const UPDATED_AT = 'cli_fechaactualizacion';
+
      public static $rules = array(
-        'cli_nombre'=>'required|min:2',
-        'cli_ci'=>'required|min:2',
-        'cli_email'=>'required|min:2',
+        'cli_nombre'=>'required|min:2|max:100',
         'usu_id'=>'required|min:1',
-        'cli_direccionfiscal'=>'required|min:2',
-        'cli_direccionenvio'=>'required|min:2',
-        'cli_banco'=>'required|min:1',
-        'cli_nrocuenta'=>'required|min:2',
-        'cli_tipocuenta'=>'required|min:1'
+        'cli_ci'=>'required|min:2|max:15',
+        'cli_email'=>'required|min:2|max:100',
+        'cli_direccionfiscal'=>'required|min:2|max:500',
+        'cli_direccionenvio'=>'required|min:2|max:500',
+        'cli_banco'=>'required|min:1|max:100',
+        'cli_nrocuenta'=>'required|min:2|max:50',
+        'cli_tipocuenta'=>'required|min:1|max:20'
      );
 
     protected $fillable = array(
         'cli_id',
+        'usu_id',
         'cli_nombre',
         'cli_ci',
         'cli_email',
-        'usu_id',
         'cli_direccionfiscal',
         'cli_direccionenvio',
         'cli_banco',

@@ -18,10 +18,11 @@ class CreatePagosHistoricosTable extends Migration
             $table->increments('pgh_id');
             $table->unsignedInteger('pag_id');
             $table->string('pgh_columna',50);
-            $table->string('pgh_valor',50);
+            $table->string('pgh_valor',20);
             $table->unsignedInteger('usu_id');
-            $table->string('pgh_descripcion',500);
-            $table->timestamps();
+            $table->string('pgh_descripcion',500)->nullable();
+            $table->timestamp('pgh_fechacreacion');
+            $table->timestamp('pgh_fechaactualizacion');
         });
     }
 
@@ -32,7 +33,6 @@ class CreatePagosHistoricosTable extends Migration
      */
     public function down()
     {
-        //
         Schema::drop('pagos_historicos');
     }
 }
