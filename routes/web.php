@@ -1,16 +1,5 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| This file is where you may define all of the routes that are handled
-| by your application. Just tell Laravel the URIs it should respond
-| to using a Closure or controller method. Build something great!
-|
-*/
-
 Route::get('/', function () {
     return redirect('home');
 });
@@ -22,21 +11,15 @@ Route::get('/home', 'HomeController@index');
 Route::resource('clientes', 'ClientesController', ['except' => [
     'create', 'store', 'update', 'destroy'
 ]]);
-
-
 Route::post('/clientes.store', 'ClientesController@store');
 
-Route::resource('pagos', 'PagosController', ['except' => [
+Route::resource('pagos', 'PagoController', ['except' => [
     'create', 'store', 'update', 'destroy'
 ]]);
-
-Route::post('/pagos.store', 'PagosController@store');
-
-Route::get('/transactions/{estatus}', 'PagosController@index');
-
-Route::get('/toProcess', 'PagosController@toProcess');
-
-Route::post('/pagos.process', 'PagosController@process');
+Route::post('/pagos.store', 'PagoController@store');
+Route::get('/transactions/{estatus}', 'PagoController@index');
+Route::get('/toProcess', 'PagoController@toProcess');
+Route::post('/pagos.process', 'PagoController@process');
 
 Route::resource('valoresvariables', 'ValorVariableController');
 

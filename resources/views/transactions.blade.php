@@ -71,11 +71,11 @@
                 <tbody>
                 @foreach ($data as $datas)
                   <tr>
-                    <td>{{ $datas->pagos_id }}</td>
-                    <td>{{ $datas->concepto }}</td>
-                    <td>{{ $datas->nombretc }}</td>
-                    <td>{{ $datas->fecha }}</td>
-                    <td>{{ $datas->monto }}</td>
+                    <td>{{ $datas->pag_id }}</td>
+                    <td>{{ $datas->pag_concepto }}</td>
+                    <td>{{ $datas->pag_nombretc }}</td>
+                    <td>{{ $datas->pag_fechacreacion }}</td>
+                    <td>{{ $datas->pag_monto }}</td>
                   </tr>
                 @endforeach
                 </tbody>

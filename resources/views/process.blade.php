@@ -96,24 +96,25 @@
                         <tr>
                             <td>
                                 <div class="input-group ">
-                                    <form name="{{ 'form_'.$datas->pagos_id }}" id="{{ 'form_'.$datas->pagos_id }}"
+                                    <form name="{{ 'form_'.$datas->pag_id }}" id="{{ 'form_'.$datas->pag_id }}"
                                           method="post" action="{{ url('pagos.process') }}">
                                         {{ csrf_field() }}
                                         <input type="text" class="form-control"
-                                               id="{{ 'cod_'.$datas->pagos_id }}" name="cod_procesado" required="required">
-                                        <input type="hidden" name="id" id="{{ 'pay_'.$datas->pagos_id }}"
-                                               value="{{ $datas->pagos_id }}"/>
+                                               id="{{ 'cod_'.$datas->pag_id }}" name="pag_codigoprocesado"
+                                               required="required">
+                                        <input type="hidden" name="pag_id" id="{{ 'pay_'.$datas->pag_id }}"
+                                               value="{{ $datas->pag_id }}"/>
                                         <span class="input-group-btn">
                                           <button type="submit" class="btn btn-info btn-flat">Procesar</button>
                                         </span>
                                     </form>
                                 </div>
                             </td>
-                            <td>{{ $datas->pagos_id }}</td>
-                            <td>{{ $datas->concepto }}</td>
-                            <td>{{ $datas->nombretc }}</td>
-                            <td>{{ $datas->fecha }}</td>
-                            <td>{{ $datas->monto }}</td>
+                            <td>{{ $datas->pag_id }}</td>
+                            <td>{{ $datas->pag_concepto }}</td>
+                            <td>{{ $datas->pag_nombretc }}</td>
+                            <td>{{ $datas->pag_fechacreacion }}</td>
+                            <td>{{ $datas->pag_monto }}</td>
                         </tr>
                     @endforeach
                     </tbody>

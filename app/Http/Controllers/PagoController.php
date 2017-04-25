@@ -2,29 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests;
 use App\Model\PagoHistorico;
+use App\Pago;
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
-use Illuminate\Support\Facades\Redirect;
-
-use App\Pagos;
-
-class PagosController extends Controller
+class PagoController extends Controller
 {
     /**
-     * Display a listing of transaction by Estatus
+     * Display a listing of transaction by Status
      *
      * @return \Illuminate\Http\Response
      */
     public function index($estatus)
     {
         $sql =
-            ' SELECT * ' .
+            ' SELECT pag_id, pag_concepto, pag_nombretc, pag_fechacreacion, pag_monto ' .
             ' FROM pagos ' .
-            ' WHERE userid = ' . (\Auth::user()->id) .
-            ' AND estatus = ' . $estatus .
-            ' ORDER BY created_at DESC';
+            ' WHERE usu_id = ' . (\Auth::user()->id) .
+            ' AND pag_estatus = ' . $estatus .
+            ' ORDER BY pag_fechacreacion DESC';
         $listado = \DB::select($sql);
 
         return view('transactions', ['data' => $listado]);
@@ -40,8 +37,8 @@ class PagosController extends Controller
         $sql =
             ' SELECT * ' .
             ' FROM pagos ' .
-            ' WHERE estatus = ' . Pagos::$EST_PORPROCESAR .
-            ' ORDER BY created_at ASC';
+            ' WHERE pag_estatus = ' . Pago::$EST_PORPROCESAR .
+            ' ORDER BY pag_fechacreacion ASC';
         $listado = \DB::select($sql);
 
         return view('process', ['data' => $listado]);
@@ -56,22 +53,25 @@ class PagosController extends Controller
     public function process(Request $request)
     {
         $this->validate($request,[
-            'cod_procesado'=>'required|unique:pagos|max:100',
-            'id'=>'required',
+            'pag_codigoprocesado' => 'required|unique:pagos|max:100',
+            'pag_id' => 'required',
         ]);
 
-        $object = Pagos::find($request->id);
+        $object = Pago::find($request->pag_id);
 
-        $object->estatus = Pagos::$EST_PROCESADOS;
-        $object->cod_procesado = $request->cod_procesado;
-        $object->fecha_procesado = date('Y-m-d H:i:s');
+        $object->pag_estatus = Pago::$EST_PROCESADOS;
+        $object->pag_codigoprocesado = $request->pag_codigoprocesado;
         $object->save();
 
-        $pgh = new PagoHistorico();
-        $pgh->createPagoHistorico($object->pagos_id, 'estatus', $object->estatus, null);
-        $pgh->save();
+        $pgh = PagoHistorico::create([
+            'pag_id' => $object->pag_id,
+            'pgh_columna' => 'pag_estatus',
+            'pgh_valor' => $object->pag_estatus,
+            'usu_id' => \Auth::user()->id,
+            'pgh_descripcion' => $object->pag_codigoprocesado,
+        ]);
 
-        \Session::flash('alert-success','Pago '.$request->cod_procesado.' procesado satisfactoriamente.');
+        \Session::flash('alert-success', 'Pago ' . $request->pag_codigoprocesado . ' procesado satisfactoriamente.');
 
         return redirect('toProcess');
 
@@ -96,35 +96,38 @@ class PagosController extends Controller
     public function store(Request $request)
     {
         //Save the payment to audit
-        $payment = new Pagos;
-        $payment->monto = $request->monto;
-        $payment->concepto = $request->concepto;
-        $payment->nombretc = $request->nombretc;
-        $payment->cith = $request->cipre . $request->cith;
+        $payment = Pago::create([
+            'usu_id' => \Auth::user()->id,
+            'pag_estatus' => Pago::$EST_PENDIENTE,
+            'pag_monto' => $request->monto,
+            'pag_concepto' => $request->concepto,
+            'pag_nombretc' => $request->nombretc,
+            'pag_cith' => $request->cipre . $request->cith,
+        ]);
 
-        $payment->userid = \Auth::user()->id;
-        $payment->fecha = date('Y-m-d H:i:s');
-        $payment->estatus = Pagos::$EST_PENDIENTE;
-
-        $payment->save();
-
-        $pgh = new PagoHistorico();
-        $pgh->createPagoHistorico($payment->pagos_id, 'estatus', $payment->estatus, null);
-        $pgh->save();
+        $pgh = PagoHistorico::create([
+            'pag_id' => $payment->pag_id,
+            'pgh_columna' => 'pag_estatus',
+            'pgh_valor' => $payment->pag_estatus,
+            'usu_id' => \Auth::user()->id,
+        ]);
 
         //Execute the Payment
         if ($this->executePayment($payment)) {
-            $payment->estatus = Pagos::$EST_PORPROCESAR;
+            $payment->pag_estatus = Pago::$EST_PORPROCESAR;
             \Session::flash('alert-success', 'Pago ejecutado satisfactoriamente.');
         } else {
-            $payment->estatus = Pagos::$EST_FALLIDO;
-            \Session::flash('alert-danger', 'Ocurrio un error al ejecutar el pago.');
+            $payment->pag_estatus = Pago::$EST_FALLIDO;
+            \Session::flash('alert-danger', 'Ocurrio un error al ejecutar el Pago.');
         }
         $payment->save();
 
-        $pgh = new PagoHistorico();
-        $pgh->createPagoHistorico($payment->pagos_id, 'estatus', $payment->estatus, null);
-        $pgh->save();
+        $pgh = PagoHistorico::create([
+            'pag_id' => $payment->pag_id,
+            'pgh_columna' => 'pag_estatus',
+            'pgh_valor' => $payment->pag_estatus,
+            'usu_id' => \Auth::user()->id,
+        ]);
 
         return redirect('home');
     }
@@ -133,7 +136,7 @@ class PagosController extends Controller
      * Execute de Payment
      * @return bool
      */
-    private function executePayment(Pagos $payment)
+    private function executePayment(Pago $payment)
     {
 
 //        Here will be the connection with bridge!

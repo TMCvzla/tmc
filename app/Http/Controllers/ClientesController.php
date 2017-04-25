@@ -49,6 +49,7 @@ class ClientesController extends Controller
         $clientes->cli_nrocuenta = $request->cuenta;
         $clientes->cli_tipocuenta = $request->tipocuenta;
         $clientes->save();
+
         return redirect('home');
     }
 

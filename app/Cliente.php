@@ -9,12 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Cliente extends Model
 {
 
-    protected $primaryKey = 'cli_id';
-
-    protected $table = 'clientes';
-
     const CREATED_AT = 'cli_fechacreacion';
-
     const UPDATED_AT = 'cli_fechaactualizacion';
 
      public static $rules = array(
@@ -28,6 +23,10 @@ class Cliente extends Model
         'cli_nrocuenta'=>'required|min:2|max:50',
         'cli_tipocuenta'=>'required|min:1|max:20'
      );
+
+    protected $primaryKey = 'cli_id';
+
+    protected $table = 'clientes';
 
     protected $fillable = array(
         'cli_id',
