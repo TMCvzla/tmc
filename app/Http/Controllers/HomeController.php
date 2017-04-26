@@ -23,8 +23,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //return view('home');
-        //return View::make('home', array('success' => '1'));
         return view('home',
             array(
                 'success' => \DB::table('clientes')->where('usu_id', \Auth::user()->id)->pluck('cli_ci'),

@@ -42,13 +42,13 @@
                 <h1>Procesar Transacciones</h1></p>
 
                 <div class="row">
-                    <div class="col-lg-5 col-xs-3">
+                    <div class="col-lg-5 col-xs-4">
                         <!--<button type="button" class="btn btn-danger btn-block btn-flat" >Regresar</button>-->
                     </div>
-                    <div class="col-lg-2 col-xs-6">
-                        <a href="{{ url('home') }}"><button type="button" class="btn btn-warning btn-block btn-flat">Volver</button></a>
+                    <div class="col-lg-2 col-xs-4">
+                        <a href="{{ url('/') }}"><button type="button" class="btn btn-warning btn-block btn-flat">Volver</button></a>
                     </div>
-                    <div class="col-lg-5 col-xs-3">
+                    <div class="col-lg-5 col-xs-4">
                         <!--<button type="button" class="btn btn-danger btn-block btn-flat" >Regresar</button>-->
                     </div>
                 </div>

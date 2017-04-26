@@ -72,7 +72,7 @@ class RegisterController extends Controller
             'cli_nombre' => $data['name'],
             'cli_ci' => $data['cipre'] . $data['ci'],
             'cli_email' => $data['email'],
-            'usu_id' => $user->id,
+            'usu_id' => $user->usu_id,
             'cli_direccionfiscal' => $data['dirfiscal'],
             'cli_direccionenvio' => $data['direnvio'],
             'cli_banco' => $data['banco'],
