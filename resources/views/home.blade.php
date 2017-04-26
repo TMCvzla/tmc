@@ -71,9 +71,9 @@
             <br/>
             <div class="row">
                 <div class="col-xs-8">
-                    <div class="checkbox icheck">
+                    {{--<div class="checkbox icheck">--}}
 
-                    </div>
+                    {{--</div>--}}
                 </div>
                 <!-- /.col -->
                 <div class="col-xs-4">
@@ -87,7 +87,7 @@
     <!-- /.login-box-body -->
 
     <!-- Indicadores -->
-    <div class="box box-solid bg-aqua-gradient">
+    <div class="box">
         <div class="box-header">
             <i class="fa fa-th"></i>
             <h3 class="box-title">Resumen de tu Cuenta</h3>
@@ -150,9 +150,11 @@
                     </div>
                 </div>
                 <!-- ./col -->
+            </div>
+            <div class="row">
                 <div class="col-lg-4 col-xs-6">
                     <!-- small box -->
-                    <div class="small-box bg-yellow">
+                    <div class="small-box bg-aqua">
                         <div class="inner">
                             <br>
 
@@ -162,6 +164,22 @@
                             <i class="ion ion-folder"></i>
                         </div>
                         <a href="{{ url('toProcess') }}" class="small-box-footer">Ver m&aacute;s <i
+                                    class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-4 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <br>
+
+                            <p>Facturar</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-folder"></i>
+                        </div>
+                        <a href="{{ url('billing') }}" class="small-box-footer">Ver m&aacute;s <i
                                     class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>

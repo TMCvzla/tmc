@@ -39,7 +39,8 @@
         <div class="box">
             <div class="box-header">
                 <p>
-                <h1>Procesar Transacciones</h1></p>
+                <h1>Procesar Transacciones</h1>
+                </p>
 
                 <div class="row">
                     <div class="col-lg-5 col-xs-4">

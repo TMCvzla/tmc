@@ -25,12 +25,12 @@ class HomeController extends Controller
     {
         return view('home',
             array(
-                'success' => \DB::table('clientes')->where('usu_id', \Auth::user()->id)->pluck('cli_ci'),
+                'success' => \DB::table('clientes')->where('usu_id', \Auth::user()->usu_id)->pluck('cli_ci'),
                 'EST_PORPROCESAR' => Pago::$EST_PORPROCESAR,
                 'EST_PROCESADOS' => Pago::$EST_PROCESADOS,
                 'EST_FACTURADOS' => Pago::$EST_FACTURADOS
             )
         );
-        //return View::make('home', array('success' => \DB::table('clientes')->where('userid', \Auth::user()->id)->pluck('ci')));
+        //return View::make('home', array('success' => \DB::table('clientes')->where('userid', \Auth::user()->usu_id)->pluck('ci')));
     }
 }

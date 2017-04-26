@@ -19,62 +19,22 @@ class PagoController extends Controller
         $sql =
             ' SELECT pag_id, pag_concepto, pag_nombretc, pag_fechacreacion, pag_monto ' .
             ' FROM pagos ' .
-            ' WHERE usu_id = ' . (\Auth::user()->id) .
+            ' WHERE usu_id = ' . (\Auth::user()->usu_id) .
             ' AND pag_estatus = ' . $estatus .
             ' ORDER BY pag_fechacreacion DESC';
         $listado = \DB::select($sql);
 
-        return view('transactions', ['data' => $listado]);
-    }
+        $tipoListado = 'Por Procesar';
+        if ($estatus == Pago::$EST_PROCESADOS) {
+            $tipoListado = 'Procesados';
+        } else if ($estatus == Pago::$EST_FACTURADOS) {
+            $tipoListado = 'Facturados';
+        }
 
-    /**
-     * Display a listing of transaction to Process
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function toProcess()
-    {
-        $sql =
-            ' SELECT * ' .
-            ' FROM pagos ' .
-            ' WHERE pag_estatus = ' . Pago::$EST_PORPROCESAR .
-            ' ORDER BY pag_fechacreacion ASC';
-        $listado = \DB::select($sql);
-
-        return view('process', ['data' => $listado]);
-    }
-
-
-    /**
-     * Process a payment
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function process(Request $request)
-    {
-        $this->validate($request,[
-            'pag_codigoprocesado' => 'required|unique:pagos|max:100',
-            'pag_id' => 'required',
+        return view('transactions', [
+            'data' => $listado,
+            'tipoListado' => $tipoListado,
         ]);
-
-        $object = Pago::find($request->pag_id);
-
-        $object->pag_estatus = Pago::$EST_PROCESADOS;
-        $object->pag_codigoprocesado = $request->pag_codigoprocesado;
-        $object->save();
-
-        $pgh = PagoHistorico::create([
-            'pag_id' => $object->pag_id,
-            'pgh_columna' => 'pag_estatus',
-            'pgh_valor' => $object->pag_estatus,
-            'usu_id' => \Auth::user()->id,
-            'pgh_descripcion' => $object->pag_codigoprocesado,
-        ]);
-
-        \Session::flash('alert-success', 'Pago ' . $request->pag_codigoprocesado . ' procesado satisfactoriamente.');
-
-        return redirect('toProcess');
-
     }
 
     /**
@@ -87,7 +47,7 @@ class PagoController extends Controller
     {
         //Save the payment to audit
         $payment = Pago::create([
-            'usu_id' => \Auth::user()->id,
+            'usu_id' => \Auth::user()->usu_id,
             'pag_estatus' => Pago::$EST_PENDIENTE,
             'pag_monto' => $request->monto,
             'pag_concepto' => $request->concepto,
@@ -99,7 +59,7 @@ class PagoController extends Controller
             'pag_id' => $payment->pag_id,
             'pgh_columna' => 'pag_estatus',
             'pgh_valor' => $payment->pag_estatus,
-            'usu_id' => \Auth::user()->id,
+            'usu_id' => \Auth::user()->usu_id,
         ]);
 
         //Execute the Payment
@@ -116,7 +76,7 @@ class PagoController extends Controller
             'pag_id' => $payment->pag_id,
             'pgh_columna' => 'pag_estatus',
             'pgh_valor' => $payment->pag_estatus,
-            'usu_id' => \Auth::user()->id,
+            'usu_id' => \Auth::user()->usu_id,
         ]);
 
         return redirect('home');
@@ -190,5 +150,72 @@ class PagoController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Display a listing of transaction to Process
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function toProcess()
+    {
+        $sql =
+            ' SELECT * ' .
+            ' FROM pagos ' .
+            ' WHERE pag_estatus = ' . Pago::$EST_PORPROCESAR .
+            ' ORDER BY pag_fechacreacion ASC';
+        $listado = \DB::select($sql);
+
+        return view('process', ['data' => $listado]);
+    }
+
+
+    /**
+     * Process a payment
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function process(Request $request)
+    {
+        $this->validate($request, [
+            'pag_codigoprocesado' => 'required|unique:pagos|max:100',
+            'pag_id' => 'required',
+        ]);
+
+        $object = Pago::find($request->pag_id);
+
+        $object->pag_estatus = Pago::$EST_PROCESADOS;
+        $object->pag_codigoprocesado = $request->pag_codigoprocesado;
+        $object->save();
+
+        $pgh = PagoHistorico::create([
+            'pag_id' => $object->pag_id,
+            'pgh_columna' => 'pag_estatus',
+            'pgh_valor' => $object->pag_estatus,
+            'usu_id' => \Auth::user()->usu_id,
+            'pgh_descripcion' => $object->pag_codigoprocesado,
+        ]);
+
+        \Session::flash('alert-success', 'Pago ' . $request->pag_codigoprocesado . ' procesado satisfactoriamente.');
+
+        return redirect('toProcess');
+
+    }
+
+    /**
+     * Display a listing of payments to bill
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function billing()
+    {
+        $sql =
+            ' SELECT * ' .
+            ' FROM pagos ' .
+            ' WHERE pag_estatus = ' . Pago::$EST_PROCESADOS .
+            ' ORDER BY pag_fechacreacion ASC';
+        $listado = \DB::select($sql);
+
+        return view('billing', ['data' => $listado]);
     }
 }

@@ -23,5 +23,7 @@ Route::post('/pagos.process', 'PagoController@process');
 
 Route::resource('valoresvariables', 'ValorVariableController');
 
+Route::get('/billing', 'PagoController@billing');
+
 
 
