@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePagosTable extends Migration
+class CreatePagosTables extends Migration
 {
     /**
      * Run the migrations.
@@ -25,6 +25,17 @@ class CreatePagosTable extends Migration
             $table->timestamp('pag_fechacreacion');
             $table->timestamp('pag_fechaactualizacion');
         });
+
+        Schema::create('pagos_historicos', function (Blueprint $table) {
+            $table->increments('pgh_id');
+            $table->unsignedInteger('pag_id');
+            $table->string('pgh_columna', 50);
+            $table->string('pgh_valor', 20);
+            $table->unsignedInteger('usu_id');
+            $table->string('pgh_descripcion', 500)->nullable();
+            $table->timestamp('pgh_fechacreacion');
+            $table->timestamp('pgh_fechaactualizacion');
+        });
     }
 
     /**
@@ -34,7 +45,7 @@ class CreatePagosTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('pagos_historicos');
         Schema::drop('pagos');
     }
 }
