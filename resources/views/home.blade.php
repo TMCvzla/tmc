@@ -14,7 +14,7 @@
         <h1>Bienvenido
             <small>¡Utiliza nuestro servicio de inmediato!</small>
         </h1>
-        <br/>
+        <br />
         <div class="row">
             <div class="col-lg-6 col-xs-6">
                 @foreach (['danger', 'warning', 'success', 'info'] as $msg)
@@ -40,7 +40,7 @@
         <form action="{{ url('pagos.store') }}" method="post">
             {{ csrf_field() }}
             <div class="form-group has-feedback">
-                <input id="monto" name="monto" type="text" class="form-control" placeholder="Monto">
+                <input id="monto" name="monto" type="text" class="form-control" placeholder="Monto" autofocus>
                 <span class="glyphicon fa-money form-control-feedback"></span>
             </div>
 
