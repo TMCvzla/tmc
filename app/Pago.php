@@ -36,6 +36,12 @@ class Pago extends Model
         'usu_id',
         'pag_estatus',
         'pag_monto',
+//        'pag_porcentajecomision',
+        'pag_montocomision',
+        'pag_montoimpuesto',
+        'pag_montocomisiontmc',
+        'pag_montocomisionpasarela',
+        'pag_montototalcliente',
         'pag_concepto',
         'pag_nombretc',
         'pag_cith',
@@ -44,17 +50,13 @@ class Pago extends Model
         'pag_fechaactualizacion'
     );
 
-    public static function findById($id)
-    {
-
-        $result = self::where('pag_id', $id)->first();
-
-//        if (!is_null($result))
-//        {
-        return $result;
+//    public static function findById($id)
+//    {
+//        $result = self::where('pag_id', $id)->first();
+//        if (!is_null($result)){
+//            return $result;
 //        }
-
 //        throw (new ModelNotFoundException())->setModel(Section::class);
-
-    }
+//
+//    }
 }

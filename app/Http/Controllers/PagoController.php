@@ -45,14 +45,34 @@ class PagoController extends Controller
      */
     public function store(Request $request)
     {
+        $porcentajeGanancia =  0.3;
+        $porcentajeImpuesto =  0.12;
+        $porcentajePasarela =  0.077;
+        $porcentajeGanancia = $porcentajePasarela + ($porcentajePasarela * $porcentajeGanancia);
+        $porcentajeImpuestoCalc = $porcentajeGanancia * $porcentajeImpuesto;
+        $porcentajeComision = $porcentajeGanancia + $porcentajeImpuestoCalc;
+        $porcentajeTmc = $porcentajeComision - $porcentajePasarela - $porcentajeImpuestoCalc;
+
+        $montoTransaccion = $request->monto;
+        $montoComision = $montoTransaccion * $porcentajeComision;
+        $montoComisionTmc = $montoTransaccion * $porcentajeTmc;
+        $montoComisionPasarela = $montoTransaccion * $porcentajePasarela;
+        $montoImpuesto = ($montoComisionTmc + $montoComisionPasarela) * $porcentajeImpuesto;
+        $montoTotalCliente = $montoTransaccion - $montoComision;
+
         //Save the payment to audit
         $payment = Pago::create([
             'usu_id' => \Auth::user()->usu_id,
             'pag_estatus' => Pago::$EST_PENDIENTE,
-            'pag_monto' => $request->monto,
+            'pag_monto' => $montoTransaccion,
             'pag_concepto' => $request->concepto,
             'pag_nombretc' => $request->nombretc,
             'pag_cith' => $request->cipre . $request->cith,
+            'pag_montocomision' => $montoComision,
+            'pag_montocomisiontmc' => $montoComisionTmc,
+            'pag_montocomisionpasarela' => $montoComisionPasarela,
+            'pag_montoimpuesto' => $montoImpuesto,
+            'pag_montototalcliente' => $montoTotalCliente,
         ]);
 
         $pgh = PagoHistorico::create([

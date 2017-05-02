@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(UserSeeder::class);
         $this->call(PaymentsSeeder::class);
+        $this->call(ConfigurationSeeder::class);
 
         $this->command->info('Updating the data completed !');
     }
