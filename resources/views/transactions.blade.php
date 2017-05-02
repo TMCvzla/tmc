@@ -61,11 +61,11 @@
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th>N&uacute;mero</th>
+                        <th width="5%">N&uacute;mero</th>
                         <th>Concepto</th>
-                        <th>Cliente</th>
-                        <th>Fecha</th>
-                        <th>Monto(Bs)</th>
+                        <th>CI-RIF / Tarjetahabiente</th>
+                        <th width="10%">Fecha</th>
+                        <th width="10%">Monto(Bs)</th>
                     </tr>
                     </thead>
 
@@ -74,7 +74,7 @@
                         <tr>
                             <td>{{ $datas->pag_id }}</td>
                             <td>{{ $datas->pag_concepto }}</td>
-                            <td>{{ $datas->pag_nombretc }}</td>
+                            <td>{{ $datas->pag_cith.' / '.$datas->pag_nombretc }}</td>
                             <td>{{ $datas->pag_fechacreacion }}</td>
                             <td>{{ $datas->pag_monto }}</td>
                         </tr>

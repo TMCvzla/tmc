@@ -83,12 +83,13 @@
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th>Acci&oacute;n</th>
-                        <th>C&oacute;digo</th>
-                        <th>Concepto</th>
-                        <th>Cliente</th>
-                        <th>Fecha</th>
-                        <th>Monto(Bs)</th>
+                        <th width="25%">C&oacute;digo Pasarela</th>
+                        <th width="5%">C&oacute;digo TMC</th>
+                        <th width="15%">Cliente</th>
+                        <th width="15%">Concepto</th>
+                        <th>ID / Tarjetahabiente</th>
+                        <th width="8%">Fecha</th>
+                        <th width="5%">Monto(Bs)</th>
                     </tr>
                     </thead>
 
@@ -112,8 +113,9 @@
                                 </div>
                             </td>
                             <td>{{ $datas->pag_id }}</td>
+                            <td>{{ $datas->usu_nombre }}</td>
                             <td>{{ $datas->pag_concepto }}</td>
-                            <td>{{ $datas->pag_nombretc }}</td>
+                            <td>{{ $datas->pag_cith . ' / ' . $datas->pag_nombretc }}</td>
                             <td>{{ $datas->pag_fechacreacion }}</td>
                             <td>{{ $datas->pag_monto }}</td>
                         </tr>

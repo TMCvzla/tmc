@@ -17,7 +17,7 @@ class PagoController extends Controller
     public function index($estatus)
     {
         $sql =
-            ' SELECT pag_id, pag_concepto, pag_nombretc, pag_fechacreacion, pag_monto ' .
+            ' SELECT pag_id, pag_concepto, pag_cith, pag_nombretc, pag_fechacreacion, pag_monto ' .
             ' FROM pagos ' .
             ' WHERE usu_id = ' . (\Auth::user()->usu_id) .
             ' AND pag_estatus = ' . $estatus .
@@ -160,10 +160,11 @@ class PagoController extends Controller
     public function toProcess()
     {
         $sql =
-            ' SELECT * ' .
-            ' FROM pagos ' .
-            ' WHERE pag_estatus = ' . Pago::$EST_PORPROCESAR .
-            ' ORDER BY pag_fechacreacion ASC';
+            ' SELECT PAG.pag_id, PAG.pag_monto, PAG.pag_concepto, PAG.pag_cith, PAG.pag_nombretc, PAG.pag_fechacreacion, USU.usu_nombre ' .
+            ' FROM pagos as PAG ' .
+            ' INNER JOIN users AS USU ON USU.usu_id = PAG.usu_id ' .
+            ' WHERE PAG.pag_estatus = ' . Pago::$EST_PORPROCESAR .
+            ' ORDER BY PAG.pag_fechacreacion ASC';
         $listado = \DB::select($sql);
 
         return view('process', ['data' => $listado]);

@@ -18,6 +18,8 @@ class CreatePagosTables extends Migration
             $table->unsignedInteger('usu_id');
             $table->string('pag_estatus',20);
             $table->double('pag_monto');
+//            $table->double('pag_montoimpuesto');
+//            $table->double('pag_montocomision');
             $table->string('pag_concepto',100);
             $table->string('pag_nombretc',100);
             $table->string('pag_cith',20);
