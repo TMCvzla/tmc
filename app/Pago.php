@@ -59,4 +59,35 @@ class Pago extends Model
 //        throw (new ModelNotFoundException())->setModel(Section::class);
 //
 //    }
+
+    public static function getMontosArray($monto)
+    {
+        /*Configuraciones que deben consultarse en BD*/
+        $porcentajeGanancia = 0.3;
+        $porcentajeImpuesto = 0.12;
+        $porcentajePasarela = 0.077;
+
+        $result = Array();
+
+        $porcentajeGanancia = $porcentajePasarela + ($porcentajePasarela * $porcentajeGanancia);
+        $porcentajeImpuestoCalc = $porcentajeGanancia * $porcentajeImpuesto;
+        $porcentajeComision = $porcentajeGanancia + $porcentajeImpuestoCalc;
+        $porcentajeTmc = $porcentajeComision - $porcentajePasarela - $porcentajeImpuestoCalc;
+
+        $montoTransaccion = $monto;
+        $montoComision = $montoTransaccion * $porcentajeComision;
+        $montoComisionTmc = $montoTransaccion * $porcentajeTmc;
+        $montoComisionPasarela = $montoTransaccion * $porcentajePasarela;
+        $montoImpuesto = ($montoComisionTmc + $montoComisionPasarela) * $porcentajeImpuesto;
+        $montoTotalCliente = $montoTransaccion - $montoComision;
+
+        $result['montoTransaccion'] = $monto;
+        $result['montoComision'] = $montoComision;
+        $result['montoComisionTmc'] = $montoComisionTmc;
+        $result['montoComisionPasarela'] = $montoComisionPasarela;
+        $result['montoImpuesto'] = $montoImpuesto;
+        $result['montoTotalCliente'] = $montoTotalCliente;
+
+        return $result;
+    }
 }
