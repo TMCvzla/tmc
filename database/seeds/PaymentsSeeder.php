@@ -61,7 +61,7 @@ class PaymentsSeeder extends Seeder {
                     'pag_montocomisionpasarela' => $montosArray['montoComisionPasarela'],
                     'pag_montoimpuesto' => $montosArray['montoImpuesto'],
                     'pag_montototalcliente' => $montosArray['montoTotalCliente'],
-                    'pag_fechacreacion' => date('Y-m-'.rand(1,30).' '.rand(1,23).':i:s'),
+                    'pag_fechacreacion' => date('Y-' . rand(1, 2) . '-' . rand(1, 28) . ' ' . rand(1, 23) . ':i:s'),
                 ]);
 
                 $pgh = PagoHistorico::create([
@@ -70,6 +70,19 @@ class PaymentsSeeder extends Seeder {
                     'pgh_valor' => $payment->pag_estatus,
                     'usu_id' => $usu->usu_id,
                 ]);
+
+                if (rand(0, 1) == 1) {
+                    $payment->pag_estatus = Pago::$EST_PROCESADOS;
+                    $payment->save();
+                    
+                    $pgh = PagoHistorico::create([
+                        'pag_id' => $payment->pag_id,
+                        'pgh_columna' => 'pag_estatus',
+                        'pgh_valor' => Pago::$EST_PROCESADOS,
+                        'usu_id' => $usu->usu_id,
+                        'pgh_fechacreacion' => date('Y-' . rand(3, 4) . '-' . rand(1, 30) . ' ' . rand(1, 23) . ':' . rand(10, 59) . ':s'),
+                    ]);
+                }
             }
         }
 
