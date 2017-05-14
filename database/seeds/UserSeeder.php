@@ -13,9 +13,12 @@ class UserSeeder extends Seeder {
     public function run()
     {
         $nuevos = [
-            ['nombre' => 'Daniel Futrille', 'email' => 'futridan@gmail.com'],
             ['nombre' => 'Administrador', 'email' => 'admin@gmail.com'],
             ['nombre' => 'Procesador Pagos', 'email' => 'procesador@gmail.com'],
+            ['nombre' => 'Daniel Futrille', 'email' => 'dfutrille@tumejorcompra.com.ve'],
+            ['nombre' => 'Eduardo Perez', 'email' => 'eperez@tumejorcompra.com.ve'],
+            ['nombre' => 'Miguelangel Espinal', 'email' => 'mespinal@tumejorcompra.com.ve'],
+            ['nombre' => 'Luis Arcia', 'email' => 'larcia@tumejorcompra.com.ve'],
         ];
 
         if(DB::table('users')->count() == 0) {
