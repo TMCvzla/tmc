@@ -20,15 +20,17 @@ class PagoController extends Controller
             ' SELECT pag_id, pag_concepto, pag_cith, pag_nombretc, pag_fechacreacion, pag_monto ' .
             ' FROM pagos ' .
             ' WHERE usu_id = ' . (\Auth::user()->usu_id) .
-            ' AND pag_estatus = ' . $estatus .
+            ' AND pag_estatus IN (' . $estatus . ') ' .
             ' ORDER BY pag_fechacreacion DESC';
         $listado = \DB::select($sql);
 
         $tipoListado = 'Por Procesar';
-        if ($estatus == Pago::$EST_PROCESADOS) {
+        if ($estatus == Pago::$EST_PROCESADO) {
             $tipoListado = 'Procesados';
-        } else if ($estatus == Pago::$EST_FACTURADOS) {
+        } else if ($estatus == Pago::$EST_FACTURADO) {
             $tipoListado = 'Facturados';
+        } else if ($estatus == Pago::$EST_CONCILIADO) {
+            $tipoListado = 'Conciliados';
         }
 
         return view('transactions', [
@@ -71,8 +73,8 @@ class PagoController extends Controller
 
         //Execute the Payment
         if ($this->executePayment($payment)) {
-            $payment->pag_estatus = Pago::$EST_PORPROCESAR;
-            \Session::flash('alert-success', 'Pago ejecutado satisfactoriamente.');
+            $payment->pag_estatus = Pago::$EST_PORCONCILIAR;
+            \Session::flash('alert-success', 'Pago Ejecutado satisfactoriamente.');
         } else {
             $payment->pag_estatus = Pago::$EST_FALLIDO;
             \Session::flash('alert-danger', 'Ocurrio un error al ejecutar el Pago.');
@@ -164,14 +166,78 @@ class PagoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function toProcess()
+    public function toConciliate()
     {
         $sql =
             ' SELECT PAG.pag_id, PAG.pag_monto, PAG.pag_concepto, PAG.pag_cith, PAG.pag_nombretc, PAG.pag_fechacreacion, USU.usu_nombre ' .
             ' FROM pagos as PAG ' .
             ' INNER JOIN users AS USU ON USU.usu_id = PAG.usu_id ' .
-            ' WHERE PAG.pag_estatus = ' . Pago::$EST_PORPROCESAR .
+            ' WHERE PAG.pag_estatus = ' . Pago::$EST_PORCONCILIAR .
             ' ORDER BY PAG.pag_fechacreacion ASC';
+        $listado = \DB::select($sql);
+
+        return view('conciliate', ['data' => $listado]);
+    }
+
+
+    /**
+     * Process a payment
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function conciliate(Request $request)
+    {
+        $this->validate($request, [
+            'pag_codigoconciliacion' => 'required|unique:pagos|max:100',
+            'pag_id' => 'required',
+        ]);
+
+        $object = Pago::find($request->pag_id);
+
+        $object->pag_estatus = Pago::$EST_CONCILIADO;
+        $object->pag_codigoconciliacion = $request->pag_codigoconciliacion;
+        $object->save();
+
+        $pgh = PagoHistorico::create([
+            'pag_id' => $object->pag_id,
+            'pgh_columna' => 'pag_estatus',
+            'pgh_valor' => $object->pag_estatus,
+            'usu_id' => \Auth::user()->usu_id,
+            'pgh_descripcion' => $object->pag_codigoconciliacion,
+        ]);
+
+        \Session::flash('alert-success', 'Pago ' . $request->pag_codigoconciliacion . ' Conciliado satisfactoriamente.');
+
+        return redirect('toConciliate');
+
+    }
+
+    /**
+     * Display a listing of payments to bill
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function toProcess()
+    {
+//        $sql =
+//            ' SELECT * ' .
+//            ' FROM pagos ' .
+//            ' WHERE pag_estatus = ' . Pago::$EST_CONCILIADO .
+//            ' ORDER BY pag_fechacreacion ASC';
+//        $listado = \DB::select($sql);
+//
+//        return view('billing', ['data' => $listado]);
+        $sql = 'SELECT ' .
+            '    PAG.usu_id ' .
+            '    , USU.usu_nombre ' .
+            '    , sum(PAG.pag_montototalcliente) AS monto_cliente ' .
+            '    , sum(PAG.pag_montocomision) AS monto_comisiones ' .
+            '    , sum(PAG.pag_monto) AS monto_pagos ' .
+            '    FROM pagos AS PAG  ' .
+            ' INNER JOIN users AS USU ON USU.usu_id = PAG.usu_id ' .
+            '    WHERE PAG.pag_estatus = ' . Pago::$EST_CONCILIADO . ' ' .
+            ' group by PAG.usu_id, USU.usu_nombre ';
+
         $listado = \DB::select($sql);
 
         return view('process', ['data' => $listado]);
@@ -187,43 +253,34 @@ class PagoController extends Controller
     {
         $this->validate($request, [
             'pag_codigoprocesado' => 'required|unique:pagos|max:100',
-            'pag_id' => 'required',
+            'usu_id' => 'required',
         ]);
 
-        $object = Pago::find($request->pag_id);
+        $sql = 'SELECT pag_id ' .
+            ' FROM pagos ' .
+            ' WHERE pag_estatus = ' . Pago::$EST_CONCILIADO . ' ' .
+            ' AND usu_id = ' . $request->usu_id;
+        $ids = \DB::select($sql);
 
-        $object->pag_estatus = Pago::$EST_PROCESADOS;
-        $object->pag_codigoprocesado = $request->pag_codigoprocesado;
-        $object->save();
+        foreach ($ids as $id) {
+            $object = Pago::find($id->pag_id);
 
-        $pgh = PagoHistorico::create([
-            'pag_id' => $object->pag_id,
-            'pgh_columna' => 'pag_estatus',
-            'pgh_valor' => $object->pag_estatus,
-            'usu_id' => \Auth::user()->usu_id,
-            'pgh_descripcion' => $object->pag_codigoprocesado,
-        ]);
+            $object->pag_estatus = Pago::$EST_PROCESADO;
+            $object->pag_codigoprocesado = $request->pag_codigoprocesado;
+            $object->save();
 
-        \Session::flash('alert-success', 'Pago ' . $request->pag_codigoprocesado . ' procesado satisfactoriamente.');
+            $pgh = PagoHistorico::create([
+                'pag_id' => $object->pag_id,
+                'pgh_columna' => 'pag_estatus',
+                'pgh_valor' => $object->pag_estatus,
+                'usu_id' => \Auth::user()->usu_id,
+                'pgh_descripcion' => $object->pag_codigoprocesado,
+            ]);
+
+//            \Session::flash('alert-success', 'Pago ' . $ids[0] . ' Procesado satisfactoriamente.');
+        }
 
         return redirect('toProcess');
 
-    }
-
-    /**
-     * Display a listing of payments to bill
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function billing()
-    {
-        $sql =
-            ' SELECT * ' .
-            ' FROM pagos ' .
-            ' WHERE pag_estatus = ' . Pago::$EST_PROCESADOS .
-            ' ORDER BY pag_fechacreacion ASC';
-        $listado = \DB::select($sql);
-
-        return view('billing', ['data' => $listado]);
     }
 }

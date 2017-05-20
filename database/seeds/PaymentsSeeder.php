@@ -98,6 +98,10 @@ class PaymentsSeeder extends Seeder {
             'COMIDA RAPIDA EL PLAYERO','ARCOS DORADOS DE VENEZUELA','LOCATEL CA','FARMATODO CA',
         ];
 
+        $abcedario = [
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+        ];
+
         DB::table('pagos')->delete();
 
         $users = DB::table('users')->get();
@@ -111,7 +115,7 @@ class PaymentsSeeder extends Seeder {
 
                 $payment = Pago::create([
                     'usu_id' => $usu->usu_id,
-                    'pag_estatus' => Pago::$EST_PORPROCESAR,
+                    'pag_estatus' => Pago::$EST_PORCONCILIAR,
                     'pag_monto' => $montosArray['montoTransaccion'],
                     'pag_concepto' => $products[rand(0,sizeof($products)-1)],
                     'pag_nombretc' => (
@@ -130,20 +134,38 @@ class PaymentsSeeder extends Seeder {
                 $pgh = PagoHistorico::create([
                     'pag_id' => $payment->pag_id,
                     'pgh_columna' => 'pag_estatus',
+                    'pgh_valor' => Pago::$EST_PENDIENTE,
+                    'usu_id' => $usu->usu_id,
+                ]);
+
+                $pgh = PagoHistorico::create([
+                    'pag_id' => $payment->pag_id,
+                    'pgh_columna' => 'pag_estatus',
                     'pgh_valor' => $payment->pag_estatus,
                     'usu_id' => $usu->usu_id,
                 ]);
 
                 if (rand(0, 1) == 1) {
-                    $payment->pag_estatus = Pago::$EST_PROCESADOS;
+
+                    $payment->pag_estatus = Pago::$EST_CONCILIADO;
+                    $payment->pag_codigoconciliacion =
+                        $abcedario[rand(0, sizeof($abcedario) - 1)] .
+                        $abcedario[rand(0, sizeof($abcedario) - 1)] .
+                        rand(0, 9) .
+                        $abcedario[rand(0, sizeof($abcedario) - 1)] .
+                        rand(0, 9) .
+                        $abcedario[rand(0, sizeof($abcedario) - 1)] .
+                        $abcedario[rand(0, sizeof($abcedario) - 1)] .
+                        rand(0, 9);
                     $payment->save();
                     
                     $pgh = PagoHistorico::create([
                         'pag_id' => $payment->pag_id,
                         'pgh_columna' => 'pag_estatus',
-                        'pgh_valor' => Pago::$EST_PROCESADOS,
+                        'pgh_valor' => Pago::$EST_CONCILIADO,
                         'usu_id' => $usu->usu_id,
                         'pgh_fechacreacion' => date('Y-' . rand(3, 4) . '-' . rand(1, 30) . ' ' . rand(1, 23) . ':' . rand(10, 59) . ':s'),
+                        'pgh_descripcion' => $payment->pag_codigoconciliacion,
                     ]);
                 }
             }

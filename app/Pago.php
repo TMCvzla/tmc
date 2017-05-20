@@ -20,12 +20,13 @@ class Pago extends Model
     
     public static $EST_FALLIDO = -1;
     public static $EST_PENDIENTE = 1;
-    public static $EST_PORPROCESAR = 2;
-    public static $EST_PROCESADOS = 3;
-    public static $EST_FACTURADOS = 4;
-    public static $EST_ANULADO = 5;
-    public static $EST_ENEVALUACION = 6;
-    public static $EST_CERRADO = 7;
+    public static $EST_PORCONCILIAR = 2;
+    public static $EST_CONCILIADO = 3;
+    public static $EST_PROCESADO = 4;
+    public static $EST_FACTURADO = 5;
+    public static $EST_ANULADO = 6;
+    public static $EST_ENEVALUACION = 7;
+    public static $EST_CERRADO = 8;
 
     protected $primaryKey = 'pag_id';
 
@@ -45,6 +46,7 @@ class Pago extends Model
         'pag_concepto',
         'pag_nombretc',
         'pag_cith',
+        'pag_codigoconciliacion',
         'pag_codigoprocesado',
         'pag_fechacreacion',
         'pag_fechaactualizacion'

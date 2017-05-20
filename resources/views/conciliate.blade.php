@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>TMC 2.0 | Transacciones</title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="{{ url('/') }}/bootstrap/css/bootstrap.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="{{ url('/') }}/plugins/datatables/dataTables.bootstrap.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="{{ url('/') }}/css/dist/AdminLTE.css">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="{{ url('/') }}/dist/css/skins/_all-skins.min.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TMC 2.0 | Transacciones</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="{{ url('/') }}/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{{ url('/') }}/plugins/datatables/dataTables.bootstrap.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ url('/') }}/css/dist/AdminLTE.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="{{ url('/') }}/dist/css/skins/_all-skins.min.css">
 
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
 <body class="hold-transition login-page">
 <div class="content-box">
@@ -39,7 +39,7 @@
         <div class="box">
             <div class="box-header">
                 <p>
-                <h1>Procesar Pagos</h1>
+                <h1>Conciliar Pagos</h1>
                 </p>
 
                 <div class="row">
@@ -47,18 +47,20 @@
                         <!--<button type="button" class="btn btn-danger btn-block btn-flat" >Regresar</button>-->
                     </div>
                     <div class="col-lg-2 col-xs-4">
-                        <a href="{{ url('/') }}"><button type="button" class="btn btn-warning btn-block btn-flat">Volver</button></a>
+                        <a href="{{ url('/') }}">
+                            <button type="button" class="btn btn-warning btn-block btn-flat">Volver</button>
+                        </a>
                     </div>
                     <div class="col-lg-5 col-xs-4">
                         <!--<button type="button" class="btn btn-danger btn-block btn-flat" >Regresar</button>-->
                     </div>
                 </div>
-                <br />
+                <br/>
                 <div class="row">
                     <div class="col-lg-6 col-xs-6">
                         @foreach (['danger', 'warning', 'success', 'info'] as $msg)
                             @if(Session::has('alert-' . $msg))
-                                <div class="alert alert-{{ $msg }}" data-dismiss="alert" >
+                                <div class="alert alert-{{ $msg }}" data-dismiss="alert">
                                     <span class="glyphicon glyphicon-ok"></span> {{ Session::get('alert-' . $msg) }}
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 </div>
@@ -83,13 +85,13 @@
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th width="25%">Referencia Transacci&oacute;n</th>
-                        <th width="5%">Fecha Corte</th>
-                        <th width="5%">Fecha Pago</th>
-                        <th>Cliente</th>
-                        <th width="8%">Monto Cliente</th>
-                        <th width="8%">Monto Comisiones</th>
-                        <th width="8%">Monto Pagos</th>
+                        <th width="25%">C&oacute;digo Pasarela</th>
+                        <th width="5%">C&oacute;digo TMC</th>
+                        <th width="15%">Cliente</th>
+                        <th width="15%">Concepto</th>
+                        <th>ID / Tarjetahabiente</th>
+                        <th width="8%">Fecha</th>
+                        <th width="5%">Monto(Bs)</th>
                     </tr>
                     </thead>
 
@@ -98,26 +100,26 @@
                         <tr>
                             <td>
                                 <div class="input-group ">
-                                    <form name="{{ 'form_'.$datas->usu_id }}" id="{{ 'form_'.$datas->usu_id }}"
-                                          method="post" action="{{ url('pagos.process') }}">
+                                    <form name="{{ 'form_'.$datas->pag_id }}" id="{{ 'form_'.$datas->pag_id }}"
+                                          method="post" action="{{ url('pagos.conciliate') }}">
                                         {{ csrf_field() }}
                                         <input type="text" class="form-control"
-                                               id="{{ 'cod_'.$datas->usu_id }}" name="pag_codigoprocesado"
+                                               id="{{ 'cod_'.$datas->pag_id }}" name="pag_codigoconciliacion"
                                                required="required">
-                                        <input type="hidden" name="usu_id" id="{{ 'pay_'.$datas->usu_id }}"
-                                               value="{{ $datas->usu_id }}"/>
+                                        <input type="hidden" name="pag_id" id="{{ 'pay_'.$datas->pag_id }}"
+                                               value="{{ $datas->pag_id }}"/>
                                         <span class="input-group-btn">
-                                          <button type="submit" class="btn btn-info btn-flat">Procesar</button>
+                                          <button type="submit" class="btn btn-info btn-flat">Conciliar</button>
                                         </span>
                                     </form>
                                 </div>
                             </td>
-                            <td>-</td>
-                            <td>-</td>
+                            <td>{{ $datas->pag_id }}</td>
                             <td>{{ $datas->usu_nombre }}</td>
-                            <td>{{ $datas->monto_cliente }}</td>
-                            <td>{{ $datas->monto_comisiones}}</td>
-                            <td>{{ $datas->monto_pagos }}</td>
+                            <td>{{ $datas->pag_concepto }}</td>
+                            <td>{{ $datas->pag_cith . ' / ' . $datas->pag_nombretc }}</td>
+                            <td>{{ $datas->pag_fechacreacion }}</td>
+                            <td>{{ $datas->pag_monto }}</td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -165,16 +167,16 @@
 {{--<script src="{{ url('/') }}/didemo.js"></script>--}}
 <!-- page script -->
 <script>
-  $(function () {
-    $('#example1').DataTable({
-      "paging": false,
-      "lengthChange": false,
-      "searching": false,
-        "ordering": false,
-      "info": false,
-      "autoWidth": false
+    $(function () {
+        $('#example1').DataTable({
+            "paging": false,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": false,
+            "info": false,
+            "autoWidth": false
+        });
     });
-  });
 </script>
 </body>
 </html>

@@ -18,6 +18,10 @@ Route::resource('pagos', 'PagoController', ['except' => [
 ]]);
 Route::post('/pagos.store', 'PagoController@store');
 Route::get('/transactions/{estatus}', 'PagoController@index');
+
+Route::get('/toConciliate', 'PagoController@toConciliate');
+Route::post('/pagos.conciliate', 'PagoController@conciliate');
+
 Route::get('/toProcess', 'PagoController@toProcess');
 Route::post('/pagos.process', 'PagoController@process');
 

@@ -26,6 +26,7 @@ class CreatePagosTables extends Migration
             $table->string('pag_concepto',100);
             $table->string('pag_nombretc',100);
             $table->string('pag_cith',20);
+            $table->string('pag_codigoconciliacion', 100)->nullable();
             $table->string('pag_codigoprocesado',100)->nullable();
             $table->timestamp('pag_fechacreacion');
             $table->timestamp('pag_fechaactualizacion');

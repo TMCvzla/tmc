@@ -128,7 +128,7 @@
                         <div class="icon">
                             <i class="ion ion-compose"></i>
                         </div>
-                        <a href="{{ url('transactions',[$EST_PROCESADOS]) }}" class="small-box-footer">Ver m&aacute;s <i
+                        <a href="{{ url('transactions',[$EST_PROCESADO]) }}" class="small-box-footer">Ver m&aacute;s <i
                                     class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -145,7 +145,7 @@
                         <div class="icon">
                             <i class="ion ion-folder"></i>
                         </div>
-                        <a href="{{ url('transactions',[$EST_FACTURADOS]) }}" class="small-box-footer">Ver m&aacute;s <i
+                        <a href="{{ url('transactions',[$EST_FACTURADO]) }}" class="small-box-footer">Ver m&aacute;s <i
                                     class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -158,12 +158,12 @@
                         <div class="inner">
                             <br>
 
-                            <p>Procesar Pagos</p>
+                            <p>Conciliar Pagos</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-folder"></i>
                         </div>
-                        <a href="{{ url('toProcess') }}" class="small-box-footer">Ver m&aacute;s <i
+                        <a href="{{ url('toConciliate') }}" class="small-box-footer">Ver m&aacute;s <i
                                     class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -174,12 +174,28 @@
                         <div class="inner">
                             <br>
 
-                            <p>Facturar</p>
+                            <p>Conciliados</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-folder"></i>
                         </div>
-                        <a href="{{ url('billing') }}" class="small-box-footer">Ver m&aacute;s <i
+                        <a href="{{ url('transactions',[$EST_CONCILIADO]) }}" class="small-box-footer">Ver m&aacute;s <i
+                                    class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-4 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <br>
+
+                            <p>Procesar</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-folder"></i>
+                        </div>
+                        <a href="{{ url('toProcess') }}" class="small-box-footer">Ver m&aacute;s <i
                                     class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
